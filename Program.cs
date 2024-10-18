@@ -8,7 +8,8 @@ public class VisionData
     public required int Result { get; set; }
     public required double MeasuredValue { get; set; }
     public required double LocationX { get; set; }
-
+    public required double LocationY { get; set; }
+    public required string Barcode { get; set; }
 }
 
 public class SQLiteTable
@@ -16,12 +17,10 @@ public class SQLiteTable
     public required string fileName { get; set; }
     public required string name { get; set; }
     public required string path { get; set; }
-
-
 }
 
 
-class Program
+class SQLControl
 {
     static void Main()
     {
@@ -31,7 +30,9 @@ class Program
             Date = "October 19",
             Result = 35,
             MeasuredValue = 91.5,
-            LocationX = 29.35
+            LocationX = 29.35,
+            LocationY = 999.99,
+            Barcode = "BARCODE"
         };
 
         // Create an object with all needed data for SQLite table
@@ -57,7 +58,7 @@ class Program
         throw new Exception("Unsupported data type");
     }
 
-    static void CreateTable(SQLiteTable table, VisionData data)
+    static void CreateTable<T>(SQLiteTable table, T data)
     {
         string connectionStr = $"Data Source={table.path};Version=3;New=True;";
 
@@ -93,7 +94,7 @@ class Program
     }
 
     // Insert data into the table
-    static void InsertDataIntoTable(SQLiteTable table, VisionData data)
+    static void InsertDataIntoTable<T>(SQLiteTable table, T data)
     {
         string connectionStr = $"Data Source={table.path};Version=3;New=True;";
 
@@ -135,6 +136,7 @@ class Program
         
     }
 
+    // Read and print all data in table - needs to be tweaked for more specific use 
     static void ReadDataFromTable(SQLiteTable table)
     {
         string connectionStr = $"Data Source={table.path};Version=3;New=True;";
